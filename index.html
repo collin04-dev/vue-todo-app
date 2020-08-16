@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Vue To-Do App</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:ital,wght@400,300&display=swap" rel="stylesheet">
+
+        <style>
+             li {
+            padding: 5px 0;
+        }
+
+        .task-done {
+            text-decoration: line-through;
+        }
+
+        .task-todo {
+            font-style: italic;
+        }
+
+        .notFinished {
+            color:red;
+        }
+
+        .finished {
+            color: green;
+        }
+
+        .card {
+            background-color: silver;
+        }
+
+        body {
+            background-color: black; 
+            color: black; 
+            font-family: 'Josefin Slab', serif;
+        }
+
+        ol {
+            list-style-position: inside;
+            color: black;
+            padding-inline-start: 10px;
+            padding-inline-end: 10px;;
+        }
+
+        .center {
+            text-align: center;
+            margin-top: 40px;
+            position: relative;
+        }
+
+        #main {
+            opacity: 1;
+            position: relative;
+            text-align: center;
+        }
+
+        #snowVideo {
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            min-width: 100%;
+            min-height: 100%;
+            opacity: 0.5;
+        }
+
+        #heading {
+            font-size: 50px;
+        }
+
+        .list-group-item {
+            margin: 10px 50px;
+            background-color: silver;
+        }
+
+        .btn {
+            margin: 10px;
+        }
+
+        #addButton {
+            margin-top: 20px;
+        }
+
+        .jumbotron {
+            background: none;
+            margin-bottom: 0;
+            color: silver;
+        }
+
+        p {
+            color: silver;
+        }
+
+        </style>
+    </head>
+
+    <body>
+
+        <!-- Main HTML -->
+        <video autoplay muted loop id="snowVideo">
+            <source src="img/snowfalling.mp4" type="video/mp4">
+        </video>
+
+        <div id="main">
+            <div class="jumbotron jumbotron-fluid">
+                <h1 id="heading">Vue To-Do App</h1>
+                <input v-model="newTask" placeholder="Enter a New Task" v-on:keyup.enter="addTask">
+                <br>
+                <button type="button" class="btn btn-outline-primary" id="addButton" v-on:click="addTask(newTask)">Add Task</button>
+            </div>
+
+            <ol class="card-columns">
+                <li class="card" v-for="task in tasks">
+                    <h3 class="card-body"><span v-bind:class="task.done ? 'task-done' : 'task-unfinished' "> {{task.subject}}</span> <i v-bind:class="task.done ? 'fa fa-check finished' : 'fa fa-exclamation notFinished'"></i></h3>
+                    <h4><span class="badge badge-primary">Mark As Complete? <input type="checkbox" v-model="task.done"></input></span></h4>
+                    <button type="button" class="btn btn-outline-danger" v-on:click="deleteTask(task)">Remove Task</button>
+
+                </li>
+            </ol>
+
+            <button type="button" class="btn btn-outline-warning" v-on:click="clearTasks()">Clear Tasks</button>
+
+        </div>
+        <div class="center">
+            <audio controls loop>
+                <source src="mp3/zm.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <p>I know...I couldn't help it</p>
+        </div>
+
+        <!-- Introduce Vue Script / JavaScript-->
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script>
+            var main = new Vue({
+                el: '#main',
+                data: {
+                    newTask: null,
+                    tasks: [],
+                    
+                    addTask: function() {
+                        
+                        if(this.newTask == null) {
+                            return;
+                        }
+                        this.tasks.push({
+                            done:false,
+                            subject: this.newTask
+                        });
+                        this.newTask = null;
+                    },
+
+                    deleteTask: function(task) {
+                        this.tasks = this.tasks.filter(function(e) {
+                            return e.subject != task.subject;
+                        });
+                    },
+
+                    clearTasks: function() {
+                        this.tasks = [];
+                    }
+                }
+            })
+        </script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    </body>
+</html>
